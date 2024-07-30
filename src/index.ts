@@ -7,16 +7,22 @@ app.use(express.json());
 
 // Endpoint untuk register user
 app.post('/register', (req: Request, res: Response) => {
-    const { username, password } = req.body;
-    // Logika untuk register user
-    res.send('User registered');
+    const { username, password, confirmPassword } = req.body;
+
+    if (!username || !password || !confirmPassword) {
+        return res.status(400).send("All fields are required");
+    }
+    if (password !== confirmPassword) {
+        return res.status(400).send("Password confirmation does not match");
+    }
+    res.send(`User registered: ${username}`);
 });
 
 // Endpoint untuk login user
 app.post('/login', (req: Request, res: Response) => {
     const { username, password } = req.body;
     // Logika untuk login user
-    res.send('User logged in');
+    res.send(`Welcome ${username}`);
 });
 
 // Endpoint untuk menambah produk
@@ -45,6 +51,6 @@ app.get('/orders', (req: Request, res: Response) => {
     res.send('List of orders');
 });
 
-app.listen(port,()=>{
+app.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });
